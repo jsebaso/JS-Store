@@ -1,0 +1,51 @@
+:root {
+    --main-pink: #FFCCCB;
+    --second-pink: #BA6B6C;
+}
+
+.bg-pink{
+    background-color: var(--main-pink) ;
+}
+
+.bg-red{
+    background-color: var(--second-pink) !important ;
+}
+
+.home-image{
+    background-image: url('images/home.jpg');
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    background-size: 100% 100%;
+}
+
+.image-product{
+    width: 100%;
+    height: 50%;
+    margin-bottom: 1rem;
+}
+
+.image-product img{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: 15px;
+}
+
+.description-product{
+    text-align: justify;
+    height: 120px;
+    overflow: hidden;
+}
+
+.center-form{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-second{
+    background-color: var(--second-pink) !important;
+    border-color: var(--second-pink) !important;
+    color: white !important;
+}
