@@ -8,13 +8,15 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. 
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        return view('Products.index', [
+            'products' => Product::all()
+        ]);
     }
 
     /**
@@ -24,7 +26,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('Products.create');
     }
 
     /**
@@ -35,7 +37,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:12'],
+            'price' => ['required', 'integer'],
+            'description' => ['required', 'string', 'max:300']
+        ]);
+
+        Product::create([
+            'name' => $request->get('name'),
+            'price' => $request->get('price'),
+            'description' => $request->get('description'),
+            'status' => $request->get('status')
+        ]);
+
+        return redirect('/product');
     }
 
     /**
@@ -57,7 +72,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('Products.edit', [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -69,7 +86,17 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:12'],
+            'price' => ['required', 'integer'],
+            'description' => ['required', 'string', 'max:300']
+        ]);
+
+        $product -> name = $request->get('name');
+        $product -> price = $request->get('price');
+        $product -> description = $request->get('description');
+        $product -> save();
+        return redirect('/product');
     }
 
     /**
