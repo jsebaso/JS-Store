@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -43,14 +45,30 @@ class ProductController extends Controller
             'description' => ['required', 'string', 'max:300']
         ]);
 
+        $image = '';
+        if($request->file('productImage') != null){
+            $image = $this->get_and_save_image($request->file('productImage'));
+        }
+
         Product::create([
             'name' => $request->get('name'),
             'price' => $request->get('price'),
             'description' => $request->get('description'),
-            'status' => $request->get('status')
+            'status' => $request->get('status'),
+            'image' => $image
         ]);
 
         return redirect('/product');
+    }
+
+    public function get_and_save_image($productcover)
+    {
+        $extension = $productcover->getClientOriginalExtension();
+        Storage::disk('public')->put(
+            $productcover->getFilename() . '.' . $extension,
+            File::get($productcover)
+        );
+        return $productcover->image = $productcover->getfilename() . '.' . $extension;
     }
 
     /**
@@ -61,7 +79,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return view('Products.show', [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -87,15 +107,19 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:12'],
+            'name' => ['required', 'string', 'max:30'],
             'price' => ['required', 'integer'],
             'description' => ['required', 'string', 'max:300']
         ]);
 
-        $product -> name = $request->get('name');
-        $product -> price = $request->get('price');
-        $product -> description = $request->get('description');
-        $product -> save();
+        if ($request->file('productImage') != null) {
+            $product->image = $this->get_and_save_image($request->file('productImage'));
+        }
+
+        $product->name = $request->get('name');
+        $product->price = $request->get('price');
+        $product->description = $request->get('description');
+        $product->save();
         return redirect('/product');
     }
 
@@ -107,6 +131,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product-> delete();
+        return redirect()->route('product.index');
     }
 }

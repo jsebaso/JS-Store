@@ -1,90 +1,98 @@
 @extends('layouts.app')
 @section('content')
-<h1 class="text-center mt-5">modify product</h1>
-<form method="POST" class="need-validations" action="/product/{{ $product->id }}" enctype="multipart/form-data" novalidate>
-    {{ csrf_field() }}
-    @csrf
-    @method('put')
+    <h1 class="text-center mt-5">modify product</h1>
+    <form method="POST" class="need-validations" action="/product/{{ $product->id }}" enctype="multipart/form-data"
+        novalidate>
+        {{ csrf_field() }}
+        @csrf
+        @method('put')
 
-    <div class="container">
-        <div class="row">
+        <div class="container">
+            <div class="row">
 
-            <div class="col-6">
+                <div class="col-6">
+                    <label> <strong> Product name</strong></label>
+                    <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror"
+                        value="{{ $product->name }}" />
 
-                <label> <strong> Product name</strong></label>
-                <input type="text" id="name" name="name" class="form-control @error ('name') is-invalid @enderror" value="{{ old('name') }} {{$product -> name}}" />
+                    @error('name')
+                        <span class="invalid-feedback" role="alert">
+                            <b>{{ $message }}</b>
+                        </span>
+                    @enderror
 
-                @error('name')
-                <span class="invalid-feedback" role="alert">
-                    <b>{{$message}}</b>
-                </span>
-                @enderror
+                    <br> <!-- Price start -->
+                    <!-- adding product price -->
 
-                <br> <!-- Price start -->
-                <!-- adding product price -->
+                    <label><strong> Product price</strong></label>
+                    <input type="text" id="price" name="price" class="form-control @error('value') is-invalid @enderror"
+                        value="${{ number_format($product->price) }}" />
 
-                <label><strong> Product price</strong></label>
-                <input type="text" id="price" name="price" class="form-control @error ('value') is-invalid @enderror" value="{{ old('price') }} {{$product -> price}}" />
+                    @error('value')
+                        <span class="invalid-feedback" role="alert">
+                            <b>{{ $message }}</b>
+                        </span>
+                    @enderror
 
-                @error('value')
-                <span class="invalid-feedback" role="alert">
-                    <b>{{$message}}</b>
-                </span>
-                @enderror
+                    <br><!-- adding product status -->
 
-                <br><!-- adding product status -->
+                    <label><strong> Product status</strong></label>
+                    <select id="status" name="status" class="form-control">
+                        <option value="Active"> Active </option>
+                        <option value="Inactive"> Inactive </option>
+                    </select>
+                    @error('value')
+                        <span class="invalid-feedback" role="alert">
+                            <b>{{ $message }}</b>
+                        </span>
+                    @enderror
 
-                <label><strong> Product status</strong></label>
-                <select id="status" name="status" class="form-control">
-                    <option value="Active"> Active </option>
-                    <option value="Inactive"> Inactive </option>
-                </select>
-                @error('value')
-                <span class="invalid-feedback" role="alert">
-                    <b>{{$message}}</b>
-                </span>
-                @enderror
+                </div><!-- col -->
 
-            </div><!-- col -->
+                <div class="col-6">
 
-            <div class="col-6">
+                    <br> <!-- Product Image-->
+                    <img id="pImage" src="{{ url(Storage::url($product->image)) }}" width="400">
+                    <input type="file" name="productImage" class="form-control" onchange="loadFile(event)">
+                    <script>
+                        var loadFile = function(event) {
+                            var image = document.getElementById('pImage');
+                            image.src = URL.createObjectURL(event.target.files[0]);
+                        };
+                    </script>
+                    <br>
+                </div><!-- col -->
 
-                <br> <!-- Product Image-->
-                <img src="img/banner.png">
-                <h1>Aquí va la subida de foto</h1>
-                <br>
-            </div><!-- col -->
+            </div><!-- row -->
+        </div><!-- container -->
 
-        </div><!-- row -->
-    </div><!-- container -->
+        <br>
+        <div class="container">
+            <div class="row">
 
-    <br>
-    <div class="container">
-        <div class="row">
-
-            <div class="col-12">
-                <!-- adding product description -->
-                <label><strong> Product description</strong></label>
-                <textarea id="description" name="description" class="form-control @error ('description') is-invalid @enderror" value="{{ old('description') }} {{$product -> description}}"> </textarea>
-
-                @error('description')
-                <span class="invalid-feedback" role="alert">
-                    <b>{{$message}}</b>
-                </span>
-                @enderror
-
-
-                <br>
-                <button class="btn btn-info"> <strong>Send</strong></button>
-
-            </div><!-- col -->
-        </div><!-- row -->
-    </div><!-- container -->
-
-
+                <div class="col-12">
+                    <!-- adding product description -->
+                    <label><strong> Product description</strong></label>
+                    <textarea id="description" name="description"
+                        class="form-control @error('description') is-invalid @enderror">{{ $product->description }}</textarea>
+                    @error('description')
+                        <span class="invalid-feedback" role="alert">
+                            <b>{{ $message }}</b>
+                        </span>
+                    @enderror
 
 
+                    <br>
+                    <button class="btn btn-info"> <strong>Send</strong></button>
 
-</form>
+                </div><!-- col -->
+            </div><!-- row -->
+        </div><!-- container -->
+
+
+
+
+
+    </form>
 
 @endsection

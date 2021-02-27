@@ -14,25 +14,32 @@
                     <!-- Primera Fila -->
                     @for ($j = 0; $j < 3; $j++)
                         @if ($productCount < count($products)) <div class="col-4">
-                                        <div class="card" style="width: 25rem;">
-                                            <img src="..." class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ $products[$productCount]->name }}</h5>
-                                                <p>
-                                                    <strong>Price: {{ $products[$productCount]->price }}</strong>
-                                                </p>
-                                                <a href="#" class="btn btn-info">
-                                                    <strong>Details</strong>
-                                                </a>
-                                                <a href="#" class="btn btn-info">
-                                                    <strong>Edit</strong>
-                                                </a>
-                                                <a href="#" class="btn btn-info">
-                                                    <strong>Delete</strong>
-                                                </a>
-                                            </div> 
-                                        </div>
-                                    </div> @endif <?php $productCount++; ?> @endfor
+                                            <div class="card" style="width: 25rem;">
+                                                <?php
+                                                $product = $products[$productCount];
+                                                ?>
+                                                <img src="{{ url(Storage::url($product->image)) }}" class="card-img-top" width="100" height="300">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ $product->name }}</h5>
+                                                    <p>
+                                                        <strong>Price: ${{ number_format($product->price) }}</strong>
+                                                    </p>
+                                                    <a href="/product/{{ $product->id }}" class="btn btn-info">
+                                                        <strong>Details</strong>
+                                                    </a>
+                                                    <a href="/product/{{ $product->id }}/edit" class="btn btn-info">
+                                                        <strong>Edit</strong>
+                                                    </a>
+                                                    <form class="d-inline" action="{{route('product.destroy', $product ->id)}}" method="POST">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button type="submit" class="btn btn-danger">
+                                                            <strong>Delete</strong>
+                                                        </button>
+                                                    </form>
+                                                </div> 
+                                            </div>
+                                        </div> @endif <?php $productCount++; ?> @endfor
                 </div><!-- col -->
             @endfor
         </div>
