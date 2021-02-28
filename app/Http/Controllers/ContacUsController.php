@@ -14,7 +14,10 @@ class ContacUsController extends Controller
      */
     public function index()
     {
-        //
+        return view('contactus.index',[ 
+
+            'contactus' => ContactUs::all()
+        ]);
     }
 
     /**
@@ -35,7 +38,21 @@ class ContacUsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'namecont' => [ 'required', 'string' ],
+            'emailcont' => [ 'required', 'string' ],
+            'phonecont' => [ 'required', 'integer' ],
+            'descriptioncont' => [ 'required', 'string' ],
+        ]);
+
+        ContactUs::create([
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'phone' => $request->get('phone'),
+            'message' => $request->get('message'),
+        ]);
+
+        return view('contactus.create');
     }
 
     /**
