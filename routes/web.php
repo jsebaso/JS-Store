@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContacUsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +20,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::resource('/product', ProductController::class);
+Route::resource('/category', CategoryController::class);
+Route::resource('/contactUs', ContacUsController::class);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
